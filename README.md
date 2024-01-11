@@ -8,17 +8,6 @@ The application is connected to a MySQL database and uses Spring Data JPA to acc
 The application features secure user registration and login functionality, and allows users to browse through products, add them to their shopping cart and place orders.
 
 
-## Table of Contents (Optional)
-
-If your README is long, add a table of contents to make it easy for users to find what they need.
-
-- [Installation](#installation)
-- [Functionality](#functionality)
-- [Usage](#usage)
-- [Dependencies](#dependencies)
-- [Credits](#credits)
-
-
 ## Functionality
 ### User functionality
 - **All users can:**
@@ -36,18 +25,17 @@ If your README is long, add a table of contents to make it easy for users to fin
   - Do everything a regular user can do.
   - Create, read, update and delete articles.
   - See all historic shopping carts.
-  - See all users.
-  - can buy products.
+  - See all current users.
   
 ## Installation
 
-+ Download and install IntelliJ IDEA or your preferred IDE [Here](https://www.jetbrains.com/idea/download/?section=windows).
-+ clone this repository to your local machine.
++ Download and install IntelliJ IDEA or your preferred IDE.
++ Clone this repository to your local machine.
 
 ## Usage
-+ Clone this repository to your local machine.
-+ Open project in IntelliJ IDEA or your preferred IDE.
-+ Run the application in the main class.
+
+- Open your IDE and run the Main class to start the application.
+- Follow the instructions in the console to use the web-shop.
 
 ## Dependencies:
 
@@ -55,6 +43,7 @@ If your README is long, add a table of contents to make it easy for users to fin
 - [jackson-annotations](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations)
 - [httpclient5](https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5)
 - [jackson-databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind)
+- [org.json](https://mvnrepository.com/artifact/org.json/json)
 
 
 ## Credits
@@ -63,6 +52,10 @@ If your README is long, add a table of contents to make it easy for users to fin
 * [Clara Brorson](https://github.com/clarabrorson)
 * [Fredrik Rinstad](https://github.com/Fringston)
 * [Jafar Hussein](https://github.com/Jafar-Hussein)
+
+## License
+
+**[MIT License](https://choosealicense.com/licenses/mit/)**
 
 ## Badges
 ![badmath](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
