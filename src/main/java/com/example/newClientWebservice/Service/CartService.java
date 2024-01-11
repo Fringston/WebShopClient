@@ -1,7 +1,7 @@
 package com.example.newClientWebservice.Service;
 
-import com.example.newClientWebservice.Models.Cart;
-import com.example.newClientWebservice.Models.CartItem;
+import com.example.newClientWebservice.DTO.Cart;
+import com.example.newClientWebservice.DTO.CartItem;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpDelete;

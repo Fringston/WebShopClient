@@ -1,6 +1,6 @@
 package com.example.newClientWebservice.Menu;
 
-import com.example.newClientWebservice.Models.Article;
+import com.example.newClientWebservice.DTO.Article;
 import com.example.newClientWebservice.Service.ArticleService;
 
 import java.util.List;

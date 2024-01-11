@@ -1,4 +1,4 @@
-package com.example.newClientWebservice.Models;
+package com.example.newClientWebservice.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

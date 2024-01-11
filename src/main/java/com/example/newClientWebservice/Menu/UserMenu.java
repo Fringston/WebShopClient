@@ -1,15 +1,14 @@
 package com.example.newClientWebservice.Menu;
 
-import com.example.newClientWebservice.Models.Article;
-import com.example.newClientWebservice.Models.Cart;
-import com.example.newClientWebservice.Models.CartItem;
-import com.example.newClientWebservice.Models.History;
+import com.example.newClientWebservice.DTO.Article;
+import com.example.newClientWebservice.DTO.Cart;
+import com.example.newClientWebservice.DTO.CartItem;
+import com.example.newClientWebservice.DTO.History;
 import com.example.newClientWebservice.Service.ArticleService;
 import com.example.newClientWebservice.Service.CartService;
 import org.apache.hc.core5.http.ParseException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import static com.example.newClientWebservice.Menu.ArticlesMenu.printArticlesMenu;
 import static com.example.newClientWebservice.Service.CartService.getOneCartById;

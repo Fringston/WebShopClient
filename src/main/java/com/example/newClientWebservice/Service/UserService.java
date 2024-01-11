@@ -1,8 +1,7 @@
 package com.example.newClientWebservice.Service;
 
-import com.example.newClientWebservice.Models.Cart;
-import com.example.newClientWebservice.Models.LoginResponse;
-import com.example.newClientWebservice.Models.User;
+import com.example.newClientWebservice.DTO.LoginResponse;
+import com.example.newClientWebservice.DTO.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpGet;

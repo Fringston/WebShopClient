@@ -1,4 +1,4 @@
-package com.example.newClientWebservice.Models;
+package com.example.newClientWebservice.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 /**
- * @Author Jafar
  * Denna klass används för att skapa objekt av typen User.
- * det är en behållare för användarinformation
- * */
+ * Det är en behållare för användarinformation
+ *
+ * @author Jafar
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,12 +1,12 @@
 package com.example.newClientWebservice.Menu;
 
-import com.example.newClientWebservice.Models.LoginResponse;
-import com.example.newClientWebservice.Models.Role;
-import com.example.newClientWebservice.Models.User;
+import com.example.newClientWebservice.DTO.LoginResponse;
+import com.example.newClientWebservice.DTO.Role;
+import com.example.newClientWebservice.DTO.User;
 import com.example.newClientWebservice.Service.UtilService;
 import org.apache.hc.core5.http.ParseException;
 import java.io.IOException;
-import static com.example.newClientWebservice.Models.Cart.getCartIdFromUser;
+import static com.example.newClientWebservice.DTO.Cart.getCartIdFromUser;
 import static com.example.newClientWebservice.Service.UserService.login;
 
 /**

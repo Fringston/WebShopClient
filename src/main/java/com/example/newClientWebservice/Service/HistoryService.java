@@ -1,12 +1,8 @@
 package com.example.newClientWebservice.Service;
 
-import com.example.newClientWebservice.Models.Article;
-import com.example.newClientWebservice.Models.History;
+import com.example.newClientWebservice.DTO.History;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -18,9 +14,7 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import static com.example.newClientWebservice.Service.UserService.login;
 /**
  * @author jafar
  *  det här klassen är för att hämta historik användarens köphistorik från databasen

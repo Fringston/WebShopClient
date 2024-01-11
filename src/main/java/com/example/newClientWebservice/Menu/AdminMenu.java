@@ -1,7 +1,6 @@
 package com.example.newClientWebservice.Menu;
 
-import com.example.newClientWebservice.Models.*;
-import com.example.newClientWebservice.Service.ArticleService;
+import com.example.newClientWebservice.DTO.*;
 import com.example.newClientWebservice.Service.CartService;
 import com.example.newClientWebservice.Service.UtilService;
 import org.apache.hc.core5.http.ParseException;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import static com.example.newClientWebservice.Menu.UserMenu.userMenu;
 import static com.example.newClientWebservice.Service.ArticleService.*;
-import static com.example.newClientWebservice.Service.CartService.*;
 import static com.example.newClientWebservice.Service.HistoryService.getAllHistory;
 import static com.example.newClientWebservice.Service.UserService.getUsers;
 import static com.example.newClientWebservice.Service.UtilService.*;

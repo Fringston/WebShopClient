@@ -127,7 +127,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Denna metod används för att lägga till en artikel i databasen.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createArticle()" class="member-name-link">createArticle</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Denna metod används för att skapa en artikel.</div>
@@ -138,20 +138,20 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Denna metod används för att ta bort en artikel från databasen.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getAllArticles()" class="member-name-link">getAllArticles</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Denna metod används för att hämta alla artiklar från databasen.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getOneArticle(int)" class="member-name-link">getOneArticle</a><wbr>(int&nbsp;id)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Denna metod används för att hämta en artikel från databasen med ett specifikt id.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#updateArticle(int,com.example.newClientWebservice.Models.Article,com.example.newClientWebservice.Models.Article,java.lang.String)" class="member-name-link">updateArticle</a><wbr>(int&nbsp;id,
- <a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a>&nbsp;existingArticle,
- <a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a>&nbsp;article,
+ <a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a>&nbsp;existingArticle,
+ <a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a>&nbsp;article,
  <a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jwt)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Denna metod används för att uppdatera en artikel i databasen.</div>
@@ -190,7 +190,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAllArticles()">
 <h3>getAllArticles</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a>&gt;</span>&nbsp;<span class="element-name">getAllArticles</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a>&gt;</span>&nbsp;<span class="element-name">getAllArticles</span>()</div>
 <div class="block">Denna metod används för att hämta alla artiklar från databasen.
  Metoden skickar en GET request till endpoint: /webshop/articles i WebService-applikationen.</div>
 <dl class="notes">
@@ -202,7 +202,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOneArticle(int)">
 <h3>getOneArticle</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a></span>&nbsp;<span class="element-name">getOneArticle</span><wbr><span class="parameters">(int&nbsp;id)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a></span>&nbsp;<span class="element-name">getOneArticle</span><wbr><span class="parameters">(int&nbsp;id)</span>
                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 org.apache.hc.core5.http.ParseException</span></div>
 <div class="block">Denna metod används för att hämta en artikel från databasen med ett specifikt id.
@@ -221,7 +221,7 @@ org.apache.hc.core5.http.ParseException</span></div>
 <li>
 <section class="detail" id="createArticle()">
 <h3>createArticle</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a></span>&nbsp;<span class="element-name">createArticle</span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a></span>&nbsp;<span class="element-name">createArticle</span>()</div>
 <div class="block">Denna metod används för att skapa en artikel.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -250,8 +250,8 @@ org.apache.hc.core5.http.ParseException</span></div>
 <section class="detail" id="updateArticle(int,com.example.newClientWebservice.Models.Article,com.example.newClientWebservice.Models.Article,java.lang.String)">
 <h3>updateArticle</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a></span>&nbsp;<span class="element-name">updateArticle</span><wbr><span class="parameters">(int&nbsp;id,
- <a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a>&nbsp;existingArticle,
- <a href="../Models/Article.html" title="class in com.example.newClientWebservice.Models">Article</a>&nbsp;article,
+ <a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a>&nbsp;existingArticle,
+ <a href="../Models/Article.html" title="class in com.example.newClientWebservice.DTO">Article</a>&nbsp;article,
  <a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jwt)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 org.apache.hc.core5.http.ParseException</span></div>
