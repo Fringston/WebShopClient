@@ -3,7 +3,6 @@ package com.example.newClientWebservice.Menu;
 import com.example.newClientWebservice.DTO.LoginResponse;
 import com.example.newClientWebservice.DTO.Role;
 import com.example.newClientWebservice.DTO.User;
-import com.example.newClientWebservice.Service.UtilService;
 import org.apache.hc.core5.http.ParseException;
 import java.io.IOException;
 import static com.example.newClientWebservice.DTO.Cart.getCartIdFromUser;
@@ -11,6 +10,7 @@ import static com.example.newClientWebservice.Service.UserService.login;
 
 /**
  * Denna klass används för att skapa en meny för inloggning.
+ *
  * @author Clara Brorson
  */
 
@@ -25,39 +25,19 @@ public class Login {
      * Beroende på om användaren har admin-roll eller inte, visas antingen admin-menyn eller användarmenyn.
      */
     public static void loginMenu() throws IOException, ParseException {
-        while (true) {
-            System.out.println("\nLogin Menu");
-            System.out.println("1. Login");
-            System.out.println("2. Back to Main Menu");
+        LoginResponse loginResponse = login();
+        Long cartId = getCartIdFromUser(loginResponse);
 
-            int choice = UtilService.getIntInput("Enter your choice: ");
+        if (cartId != null) {
+            System.out.println("Ready to go shopping? Don't forget your Cart ID: " + cartId);
 
-            switch (choice) {
-                case 1:
-                    LoginResponse loginResponse = login();
-                    Long cartId = getCartIdFromUser(loginResponse);
-
-                    if (cartId != null) {
-                        System.out.println("Ready to go shopping? Don't forget your Cart ID: " + cartId);
-
-                        if (isAdmin(loginResponse.getUser())) {
-                            AdminMenu.adminMenu1(loginResponse.getJwt());
-                        } else {
-                            UserMenu.userMenu(loginResponse.getJwt());
-                        }
-
-                    } else {
-                        System.out.println("Something went wrong. Please try again.");
-                    }
-                    break;
-                case 2:
-                    MainMenu.runMeny();
-                    return;
-                default:
-                    System.out.println("Invalid input. Please enter a number between 1 and 3.");
-                    loginMenu();
-                    break;
+            if (isAdmin(loginResponse.getUser())) {
+                AdminMenu.adminChoice(loginResponse.getJwt());
+            } else {
+                UserMenu.userMenu(loginResponse.getJwt());
             }
+        } else {
+            System.out.println("Something went wrong. Please try again.");
         }
     }
 

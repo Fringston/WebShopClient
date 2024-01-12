@@ -99,7 +99,13 @@ public class ArticleService {
         article.setName(getStringInput("Enter the name of the article:"));
         article.setCost(getIntInput("Enter the price of the article:"));
         article.setDescription(getStringInput("Enter the description of the article:"));
-        return article;
+
+        if (article.getDescription().equals("")) {
+            System.out.println("The article must have a description");
+            return createArticle();
+        } else {
+            return article;
+        }
     }
 
     /**

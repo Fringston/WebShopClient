@@ -23,8 +23,19 @@ public class UtilService {
     public static String getStringInput(String prompt) {
         Scanner scan = new Scanner(System.in);
         System.out.print(prompt);
+        try {
+
         String input = scan.nextLine();
+        if (input.equals("")) {
+            System.out.println("Try again");
+            return getStringInput(prompt);
+        }
         return input;
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.\n");
+            scan.next(); // discard the invalid input
+            return getStringInput(prompt);
+        }
     }
 
     /**
@@ -107,4 +118,24 @@ public class UtilService {
             return getIntInputForHttpPatch(prompt);
         }
     }
+
+    /**
+     * Denna metod används för att läsa in input från användaren när ett lösenord ska skapas.Här accepteras även siffror och specialtecken.
+     * @param prompt är en String som innehåller meddelandet som ska visas för användaren innan inmatning läses in.
+     * @return en String som lästs in från användaren.
+     */
+    public static String getPasswordInput(String prompt) {
+        Scanner scan = new Scanner(System.in);
+        System.out.print(prompt);
+        String input = scan.nextLine();
+
+        if (input.equals("")) {
+            System.out.println("Try again");
+            return getPasswordInput(prompt);
+        } else {
+            return input;
+        }
+    }
 }
+
+

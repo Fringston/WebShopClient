@@ -19,8 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.newClientWebservice.Service.UtilService.createPayload;
-import static com.example.newClientWebservice.Service.UtilService.getStringInput;
+import static com.example.newClientWebservice.Service.UtilService.*;
 
 public class UserService {
     /**
@@ -68,27 +67,27 @@ public class UserService {
      * denna metoden är för att skapa en ny användare där alla användare eller oregristrerade användare kan använda
      */
     public static void register()throws IOException, ParseException{
-        // skapa ett username och password
-        String username = getStringInput("Enter username ");
-        String password = getStringInput("Enter your password ");
-        // skapa ett user objekt och sparar username och password i det
+        //Skapar ett username och password
+        String username = getStringInput("Enter username: ");
+        String password = getPasswordInput("Enter your password: ");
+        //Skapar ett user objekt och sparar username och password i det
         User newUser = new User(0L, username, password);
-        // skapa ett nytt request
+        //Skapar en nytt request
         HttpPost request = new HttpPost("http://localhost:8081/webshop/auth/register");
-        // skapa en payload
+        //Skapa en payload
         request.setEntity(createPayload(newUser));
-        // skicka request
+        //Skicka request
         CloseableHttpResponse response = httpClient.execute(request);
-        // om response code inte är 200 så har något gått fel
+        //Om response code inte är 200 så har något gått fel
         if (response.getCode() != 200){
             System.out.println("Something went wrong");
             return;
         }
-        // hämta payload från response
+        //Hämta payload från response
         HttpEntity payload = response.getEntity();
-        // skapa ett user objekt från payload
+        //Skapa ett user objekt från payload
         ObjectMapper mapper = new ObjectMapper();
-        // skriv ut att användaren har skapats
+        //Skriv ut att användaren har skapats
         User responseUser = mapper.readValue(EntityUtils.toString(payload), new TypeReference<User>() {});
 
         System.out.println(String.format("User %s has been created with the user-id: %d",responseUser.getUsername(), responseUser.getId()));

@@ -28,7 +28,7 @@ public class AdminMenu {
      * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
      * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
      */
-    public static void adminMenu1(String jwt) throws IOException, ParseException {
+    public static void adminChoice (String jwt) throws IOException, ParseException {
         while (true) {
             System.out.println("\nChoose an option:");
             System.out.println("1. User menu");
@@ -42,14 +42,14 @@ public class AdminMenu {
                     userMenu(jwt);
                     break;
                 case 2:
-                    adminMenu2(jwt);
+                    adminMenu(jwt);
                     break;
                 case 3:
                     System.exit(0);
                     break;
                 default:
                     System.out.println("Invalid input. Please enter a number between 1 and 3.");
-                    adminMenu1(jwt);
+                    adminChoice(jwt);
                     break;
             }
         }
@@ -61,7 +61,7 @@ public class AdminMenu {
      * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
      * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
      */
-    public static void adminMenu2(String jwt) throws IOException, ParseException {
+    public static void adminMenu(String jwt) throws IOException, ParseException {
         while (true) {
             System.out.println("\nAdmin menu:\n");
             System.out.println("1. View all current carts");
@@ -94,11 +94,11 @@ public class AdminMenu {
                     removeArticle(jwt);
                     break;
                 case 7:
-                    adminMenu1(jwt);
+                    adminChoice(jwt);
                     break;
                default:
                    System.out.println("Invalid input. Please enter a number between 1 and 7.");
-                    adminMenu2(jwt);
+                    adminMenu(jwt);
                   break;
             }
        }
@@ -239,7 +239,7 @@ public class AdminMenu {
             deleteArticle(id, jwt);
         } else if (getIntInput("Enter your choice: ") == 2) {
                 System.out.println("The article was not deleted.");
-            adminMenu2(jwt);
+            adminMenu(jwt);
         } else {
             System.out.println("Invalid input. Please enter a number between 1 and 2.");
             removeArticle(jwt);
