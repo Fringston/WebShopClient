@@ -26,6 +26,7 @@ public class MainMenu {
 
         }
     }
+
     /**
      * Denna metod skriver ut Main Menyn
      */
@@ -44,23 +45,15 @@ public class MainMenu {
 
     public static void userChoice(int choice) throws IOException, ParseException {
         switch (choice) {
-            case 1:
-                LoginMenu.loginUser();
-                break;
-            case 2:
-                Register.register();
-                break;
-            case 3:
-                ArticlesMenu.printArticlesMenu();
-                break;
-            case 4:
+            case 1 -> LoginMenu.loginUser();
+            case 2 -> Register.register();
+            case 3 -> ArticlesMenu.printArticlesMenu();
+            case 4 -> {
                 System.out.println("Exiting...");
                 isRunning = false;
                 System.exit(0);
-                break;
-            default:
-                System.out.println("Invalid input. Please enter a number between 1 and 4.");
-                break;
+            }
+            default -> System.out.println("Invalid input. Please enter a number between 1 and 4.");
         }
     }
 }

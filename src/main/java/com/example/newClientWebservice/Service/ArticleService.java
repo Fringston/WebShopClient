@@ -86,7 +86,7 @@ public class ArticleService {
         ObjectMapper mapper = new ObjectMapper();
         Article article = mapper.readValue(EntityUtils.toString(entity), new TypeReference<Article>() {});
 
-        System.out.println(String.format("Article: %s \n Price: %d", article.getName(), article.getCost()));
+        System.out.printf("Article: %s \n Price: %d%n", article.getName(), article.getCost());
         return article;
     }
 
@@ -143,7 +143,7 @@ public class ArticleService {
 
         if (responseArticle.getName().equals(newArticle.getName()) && responseArticle.getCost() == newArticle.getCost()
                 && responseArticle.getDescription().equals(newArticle.getDescription())) {
-            System.out.println(String.format("The article: %s, has been added", responseArticle.getName()));
+            System.out.printf("The article: %s, has been added%n", responseArticle.getName());
         } else {
             System.out.println("Something went wrong");
         }
@@ -182,7 +182,7 @@ public class ArticleService {
         CloseableHttpResponse response = httpClient.execute(request);
 
         if (response.getCode() != 200) {
-            System.out.println("Error occurred: " + response.toString());
+            System.out.println("Error occurred: " + response);
             return null;
         }
 

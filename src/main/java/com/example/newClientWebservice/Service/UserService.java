@@ -58,15 +58,6 @@ public class UserService {
             return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<User>>() {});
     }
 
-    /*public static int getCartIdFromCurrentUser(String username) {
-        try {
-            Long cartId = getCartIdFromUser(loginResponse);
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }*/
-
     /**
      * Denna metod skapar en ny användare.
      * Alla användare, även oregistrerade användare har tillgång till denna metod.
@@ -103,7 +94,6 @@ public class UserService {
      *
      *  @return ett objekt av LoginResponse klassen
      */
-
     public static LoginResponse login() throws IOException, ParseException{
         // skapa ett username och password
         String username = getStringInput("Enter username ");
@@ -134,7 +124,6 @@ public class UserService {
             return null;
         }
         System.out.println(String.format("\nUser: %s has logged in", loginResponse.getUser().getUsername()));
-        /*System.out.println(String.format("JWT token: %s", loginResponse.getJwt()));*/
 
         return loginResponse;
     }

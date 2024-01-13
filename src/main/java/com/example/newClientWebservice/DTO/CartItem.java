@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 /**
  * Denna klass används för att skapa objekt av typen CartItem.
  *
- * @Author Fredrik
+ * @author Fredrik
  */
 @Data
 @AllArgsConstructor

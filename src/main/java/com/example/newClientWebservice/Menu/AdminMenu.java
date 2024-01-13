@@ -38,19 +38,13 @@ public class AdminMenu {
             int choice = getIntInput("\nEnter your choice: ");
 
             switch (choice) {
-                case 1:
-                    userMenu(jwt, cartId);
-                    break;
-                case 2:
-                    adminMenu(jwt, cartId);
-                    break;
-                case 3:
-                    MainMenu.runMeny();
-                    break;
-                default:
+                case 1 -> userMenu(jwt, cartId);
+                case 2 -> adminMenu(jwt, cartId);
+                case 3 -> MainMenu.runMeny();
+                default -> {
                     System.out.println("Invalid input. Please enter a number between 1 and 3.");
                     adminChoice(jwt, cartId);
-                    break;
+                }
             }
         }
     }
@@ -77,31 +71,17 @@ public class AdminMenu {
            int choice = UtilService.getIntInput("\nEnter your choice: ");
 
             switch (choice) {
-               case 1:
-                     getAllCarts(jwt);
-                    break;
-               case 2:
-                    getAllHistories(jwt);
-                   break;
-               case 3:
-                   getAllUsers(jwt);
-                    break;
-                case 4:
-                   addNewArticle(jwt);
-                    break;
-               case 5:
-                   patchArticle(jwt);
-                    break;
-               case 6:
-                    removeArticleFromDB(jwt, cartId);
-                    break;
-                case 7:
-                    adminChoice(jwt, cartId);
-                    break;
-               default:
-                   System.out.println("Invalid input. Please enter a number between 1 and 7.");
+                case 1 -> getAllCarts(jwt);
+                case 2 -> getAllHistories(jwt);
+                case 3 -> getAllUsers(jwt);
+                case 4 -> addNewArticle(jwt);
+                case 5 -> patchArticle(jwt);
+                case 6 -> removeArticleFromDB(jwt, cartId);
+                case 7 -> adminChoice(jwt, cartId);
+                default -> {
+                    System.out.println("Invalid input. Please enter a number between 1 and 7.");
                     adminMenu(jwt, cartId);
-                  break;
+                }
             }
        }
    }
@@ -115,6 +95,7 @@ public class AdminMenu {
     public static void getAllCarts(String jwt) throws IOException, ParseException {
         List<Cart> carts = CartService.getAllCarts(jwt);
         System.out.println("\nAll current carts:\n");
+        assert carts != null;
         for (Cart cart : carts) {
             if (cart != null) {
                 System.out.println("\u001B[4m" + "Cart ID: " + cart.getId() + "\u001B[0m" + "\nUser: " + cart.getUsername());
@@ -123,10 +104,10 @@ public class AdminMenu {
                 } else {
                     for (CartItem cartItem : cart.getCartItems()) {
                         Article article = cartItem.getArticle();
-                        System.out.println(String.format(
-                                "Article ID: %d \n Article name: %s \n  Cost: %d \n  Description: %s \n Quantity: %d\n",
+                        System.out.printf(
+                                "Article ID: %d \n Article name: %s \n  Cost: %d \n  Description: %s \n Quantity: %d\n%n",
                                 article.getId(), article.getName(), article.getCost(), article.getDescription(), cartItem.getQuantity()
-                        ));
+                        );
                     }
                 }
             } else {
@@ -138,43 +119,45 @@ public class AdminMenu {
    /**
     * Den här metoden visar alla varukorgar som någonsin funnits historiskt.
     * @param jwt är en String som innehåller en JWT-token.
-    * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
-    * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
     */
-   public static void getAllHistories(String jwt) throws IOException, ParseException {
+   public static void getAllHistories(String jwt) {
        List<History> histories = getAllHistory(jwt);
-       System.out.println("\nPurchase history:\n");
+       System.out.println("\nPurchase histories:\n");
+       assert histories != null;
        for (History history : histories) {
            for (Article article : history.getPurchasedArticles()) {
-               System.out.println(String.format(
-                       "id: %d \n  User: %s \n  name: %s \n  cost: %d \n  description: %s \n ",
+               System.out.printf(
+                       "History id: %d \n  User: %s \n  name: %s \n  cost: %d \n  description: %s \n %n",
                        history.getId(), history.getUser().getUsername(), article.getName(), article.getCost(), article.getDescription()
-               ));
+               );
            }
        }
    }
 
    /**
-    * Den här metoden visar alla användare.
+    * Denna metode visar alla användare.
     * @param jwt är en String som innehåller en JWT-token.
     * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
     * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
     */
    public static void getAllUsers(String jwt) throws IOException, ParseException {
         List<User> users = getUsers(jwt);
-        for (User user : users) {
-            System.out.println(String.format("Id: %d\n Username: %s",user.getId(), user.getUsername()));
+       assert users != null;
+       for (User user : users) {
+            System.out.printf("Id: %d\n Username: %s%n",user.getId(), user.getUsername());
         }
     }
 
     /**
-     * Den här metoden lägger till en artikel.
+     * Denna metod lägger till en artikel.
      * @param jwt är en String som innehåller en JWT-token.
-     * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
-     * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
      */
-    public static void addNewArticle(String jwt) throws IOException, ParseException {
-        addArticle(jwt);
+    public static void addNewArticle(String jwt){
+        try {
+            addArticle(jwt);
+        } catch (IOException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     /**

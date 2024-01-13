@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.example.newClientWebservice.Menu.ArticlesMenu.printArticlesMenu;
-import static com.example.newClientWebservice.Service.CartService.getCartIdFromUser;
 import static com.example.newClientWebservice.Service.CartService.getOneCartById;
 import static com.example.newClientWebservice.Service.HistoryService.getCurrentUserHistory;
 import static com.example.newClientWebservice.Service.UtilService.getIntInput;
@@ -37,34 +36,21 @@ public class UserMenu {
             int choice = getIntInput("Enter your choice: ");
 
             switch (choice) {
-                case 1:
-                    printArticlesMenu();
-                    break;
-                case 2:
-                    addFruitToCart(jwt, cartId);
-                    break;
-                case 3:
-                    viewCart(jwt, cartId);
-                    break;
-                case 4:
-                    deleteFruitFromCart(jwt, cartId);
-                    break;
-                case 5:
-                    updateFruitQuantity(jwt, cartId);
-                    break;
-                case 6:
-                    getHistory(jwt);
-                    break;
-                case 7:
-                    purchaseCart(jwt);
-                    break;
-                case 8:
+                case 1 -> printArticlesMenu();
+                case 2 -> addFruitToCart(jwt, cartId);
+                case 3 -> viewCart(jwt, cartId);
+                case 4 -> deleteFruitFromCart(jwt, cartId);
+                case 5 -> updateFruitQuantity(jwt, cartId);
+                case 6 -> getHistory(jwt);
+                case 7 -> purchaseCart(jwt);
+                case 8 -> {
                     MainMenu.runMeny();
                     return;
-                default:
+                }
+                default -> {
                     System.out.println("Invalid input. Please enter a number between 1 and 7.");
                     userMenu(jwt, cartId);
-                    break;
+                }
             }
         }
     }
@@ -83,6 +69,7 @@ public class UserMenu {
         int quantity = getIntInput("Enter the quantity of the fruit to add to the basket: ");
 
         List<Article> articles = ArticleService.getAllArticles();
+        assert articles != null;
         Article selectedArticle = articles.stream()
                 .filter(article -> article.getId() == articleId)
                 .findFirst()
@@ -97,17 +84,16 @@ public class UserMenu {
 
     private static void viewCart(String jwt, Long cartId) throws IOException, ParseException {
 
-        /*int cartId = getIntInput("Enter the cart ID: ");*/
         Cart cart = getOneCartById(Math.toIntExact(cartId), jwt);
 
         if (cart != null) {
-            System.out.println(String.format("\nCart %d belongs to %s and contains:", cart.getId(), cart.getUsername()));
+            System.out.printf("\nCart %d belongs to %s and contains:%n", cart.getId(), cart.getUsername());
             for (CartItem cartItem : cart.getCartItems()) {
                 Article article = cartItem.getArticle();
-                System.out.println(String.format(" Article id: %d\n Article: %s \n Price: %d \n Description: %s \n Quantity: %d\n",
-                        article.getId(), article.getName(), article.getCost(), article.getDescription(), cartItem.getQuantity()));
+                System.out.printf(" Article id: %d\n Article: %s \n Price: %d \n Description: %s \n Quantity: %d\n%n",
+                        article.getId(), article.getName(), article.getCost(), article.getDescription(), cartItem.getQuantity());
             }
-            System.out.println(String.format("Total cost: %d", cart.getTotalCost()));
+            System.out.printf("Total cost: %d%n", cart.getTotalCost());
         } else {
             System.out.println("Cart not found or an error occurred.");
         }
@@ -137,21 +123,22 @@ public class UserMenu {
         }
     }
 
-    private static void getHistory(String jwt) throws IOException, ParseException {
+    private static void getHistory(String jwt) {
         List<History> histories = getCurrentUserHistory(jwt);
         System.out.println("\nPurchased Articles:\n");
+        assert histories != null;
         for (History history : histories) {
             for (Article article : history.getPurchasedArticles()) {
-                System.out.println(String.format(
-                        "History id: %d\n User: %s\n article id: %d\n name: %s\n cost: %d\n description: %s\n",
+                System.out.printf(
+                        "History id: %d\n User: %s\n article id: %d\n name: %s\n cost: %d\n description: %s\n%n",
                         history.getId(), history.getUser().getUsername(), article.getId(), article.getName(), article.getCost(), article.getDescription()
-                ));
+                );
             }
-            System.out.println(String.format("Total cost: %d", history.getTotalCost()));
+            System.out.printf("Total cost: %d%n", history.getTotalCost());
         }
     }
 
-    private static void purchaseCart(String jwt) throws IOException, ParseException {
+    private static void purchaseCart(String jwt) {
         CartService.purchaseArticles(jwt);
     }
 }

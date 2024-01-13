@@ -6,9 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 /**
- * @Author Jafar
  * Denna klass används för att skapa objekt av typen User.
- * det är en behållare för användarens historik
+ * Det är en behållare för användarens historik
+ *
+ * @author Jafar
  * */
 
 @Data
