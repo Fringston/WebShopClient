@@ -73,20 +73,22 @@ public class UserMenu {
      * Samtliga metoder nedanför anropas i userMenu-metoden.
      *
      * @param jwt är en sträng som används för att autentisera användaren.
-     * @throws IOException    om det blir fel med inläsning av data.
+     * @param cartId är id:t för den kundkorg som användaren har.
+     * @throws IOException om det blir fel med inläsning av data.
      * @throws ParseException om det blir fel med parsning av data.
      */
-
     private static void addFruitToCart(String jwt, Long cartId) throws IOException, ParseException {
         printArticlesMenu();
-        int articleNumber = getIntInput("\nEnter the article ID-number of a fruit to add to the basket: ");
+        int articleId = getIntInput("\nEnter the article ID-number of a fruit to add to the basket: ");
         int quantity = getIntInput("Enter the quantity of the fruit to add to the basket: ");
 
         List<Article> articles = ArticleService.getAllArticles();
-        if (articleNumber > 0 && articleNumber <= articles.size()) {
-            //Varför minus 1?
-            Article selectedArticle = articles.get(articleNumber - 1);
+        Article selectedArticle = articles.stream()
+                .filter(article -> article.getId() == articleId)
+                .findFirst()
+                .orElse(null);
 
+        if (selectedArticle != null) {
             CartService.addArticleToCart(Math.toIntExact(cartId), Math.toIntExact(selectedArticle.getId()), quantity, jwt);
         } else {
             System.out.println("Invalid article number. Please try again.");
