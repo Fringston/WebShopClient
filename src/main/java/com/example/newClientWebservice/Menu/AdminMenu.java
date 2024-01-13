@@ -31,9 +31,9 @@ public class AdminMenu {
     public static void adminChoice (String jwt) throws IOException, ParseException {
         while (true) {
             System.out.println("\nChoose an option:");
-            System.out.println("1. User menu");
-            System.out.println("2. Admin menu");
-            System.out.println("3. Exit.");
+            System.out.println("1. Got to user menu");
+            System.out.println("2. Go to admin menu");
+            System.out.println("3. Log out");
 
             int choice = getIntInput("\nEnter your choice: ");
 
@@ -45,7 +45,7 @@ public class AdminMenu {
                     adminMenu(jwt);
                     break;
                 case 3:
-                    System.exit(0);
+                    MainMenu.runMeny();
                     break;
                 default:
                     System.out.println("Invalid input. Please enter a number between 1 and 3.");

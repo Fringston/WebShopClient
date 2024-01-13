@@ -34,7 +34,7 @@ public class UserMenu {
             System.out.println("5. Want more fruits? Update the quantity of a fruit in the basket");
             System.out.println("6. History of purchases");
             System.out.println("7. Ready to checkout? Proceed to checkout");
-            System.out.println("8. Back to Main Menu\n");
+            System.out.println("8. Log out\n");
 
             int choice = getIntInput("Enter your choice: ");
 
