@@ -5,7 +5,7 @@ import com.example.newClientWebservice.DTO.Role;
 import com.example.newClientWebservice.DTO.User;
 import org.apache.hc.core5.http.ParseException;
 import java.io.IOException;
-import static com.example.newClientWebservice.DTO.Cart.getCartIdFromUser;
+import static com.example.newClientWebservice.Service.CartService.getCartIdFromUser;
 import static com.example.newClientWebservice.Service.UserService.login;
 
 /**
@@ -14,7 +14,7 @@ import static com.example.newClientWebservice.Service.UserService.login;
  * @author Clara Brorson
  */
 
-public class Login {
+public class LoginMenu {
 
     /**
      * Denna metod används för att skapa en meny för inloggning.
@@ -24,21 +24,22 @@ public class Login {
      * En if sats kontrollerar om användaren har admin-roll genom att anropa metoden isAdmin.
      * Beroende på om användaren har admin-roll eller inte, visas antingen admin-menyn eller användarmenyn.
      */
-    public static void loginMenu() throws IOException, ParseException {
+    public static Long loginUser() throws IOException, ParseException {
         LoginResponse loginResponse = login();
         Long cartId = getCartIdFromUser(loginResponse);
 
         if (cartId != null) {
-            System.out.println("Ready to go shopping? Don't forget your Cart ID: " + cartId);
+            System.out.println("Ready to go shopping? Your Cart ID is: " + cartId);
 
             if (isAdmin(loginResponse.getUser())) {
-                AdminMenu.adminChoice(loginResponse.getJwt());
+                AdminMenu.adminChoice(loginResponse.getJwt(), cartId);
             } else {
-                UserMenu.userMenu(loginResponse.getJwt());
+                UserMenu.userMenu(loginResponse.getJwt(), cartId);
             }
         } else {
             System.out.println("Something went wrong. Please try again.");
         }
+        return cartId;
     }
 
     /**

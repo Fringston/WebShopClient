@@ -19,21 +19,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.newClientWebservice.Service.CartService.getCartIdFromUser;
 import static com.example.newClientWebservice.Service.UtilService.*;
-
+/**
+ * Denna klass innehåller metoder för att utföra operationer på user-tabellen i databasen.
+ * Metoderna är kopplade till olika endpoints i WebService-applikationen.
+ *
+ * @author Jafar Hussein
+ */
 public class UserService {
-    /**
-     * @Author: Jafar Hussein
-     * Denna klassen är för att hämta alla användare från databasen
-     * Det finns tre metoder getUsers, register och login
-     * */
+
     private static final CloseableHttpClient httpClient = HttpClients.createDefault();
 
     /**
-     * @Method getUsers hämtar alla användare från databasen
+     * Denna metod hämtar alla användare från databasen, endast användare med admin roll kan använda den
+     *
      * @param jwt är en string som är en token som används för att autentisera användaren
-     * @Return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<User>>() {}) är en arraylist av User objekt
-     * det här metoden är för admin för att kunna se alla användare
+     * @return är en arraylist av User objekt
      * */
     public static List<User> getUsers(String jwt) throws IOException, ParseException { // för admin
     // skapa ett objekt av http get klassen
@@ -54,17 +56,20 @@ public class UserService {
             ObjectMapper mapper = new ObjectMapper();
             // skapar en arraylist av User objekt för att kunna loopa igenom och skriva ut alla users
             return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<User>>() {});
-        // loopa igenom och skriv ut users
-//        for (User user : users) {
-//            System.out.println(String.format("Id: %d \n  Username: %s",user.getId(), user.getUsername()));
-//        }
     }
 
+    /*public static int getCartIdFromCurrentUser(String username) {
+        try {
+            Long cartId = getCartIdFromUser(loginResponse);
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }*/
+
     /**
-     * @Method register skapar en ny användare
-     * använder inte jwt token som parameter eftersom att det är en ny användare som inte har en token
-     * @return void
-     * denna metoden är för att skapa en ny användare där alla användare eller oregristrerade användare kan använda
+     * Denna metod skapar en ny användare.
+     * Alla användare, även oregistrerade användare har tillgång till denna metod.
      */
     public static void register()throws IOException, ParseException{
         //Skapar ett username och password
@@ -94,16 +99,15 @@ public class UserService {
     }
 
     /**
-     * @Method login loggar in en användare
-     * ingen parameter eftersom att användaren inte har en token och måste logga in för att få en token
-     *  @return loginResponse är ett objekt av LoginResponse klassen
-     *  denna metoden är för att logga in en användare där alla registrerade användare kan använda för att logga in
+     * Denna metod loggar in en användare, alla registrerade användare kan använda den
+     *
+     *  @return ett objekt av LoginResponse klassen
      */
 
     public static LoginResponse login() throws IOException, ParseException{
         // skapa ett username och password
         String username = getStringInput("Enter username ");
-        String password = getStringInput("Enter your password ");
+        String password = getPasswordInput("Enter your password ");
         //Skapa user objekt
         User loginUser = new User(0L, username, password);
 
@@ -126,11 +130,11 @@ public class UserService {
         ObjectMapper mapper = new ObjectMapper();
         LoginResponse loginResponse = mapper.readValue(EntityUtils.toString(payload), new TypeReference<LoginResponse>() {});
         if (loginResponse.getUser() == null) {
-            System.out.println("Felaktigt användarnamn eller lösenord");
+            System.out.println("Wrong username or password. Please try again.");
             return null;
         }
-        System.out.println(String.format("\nUser %s has logged in", loginResponse.getUser().getUsername()));
-        System.out.println(String.format("JWT token: %s", loginResponse.getJwt()));
+        System.out.println(String.format("\nUser: %s has logged in", loginResponse.getUser().getUsername()));
+        /*System.out.println(String.format("JWT token: %s", loginResponse.getJwt()));*/
 
         return loginResponse;
     }

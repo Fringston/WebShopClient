@@ -45,7 +45,7 @@ public class MainMenu {
     public static void userChoice(int choice) throws IOException, ParseException {
         switch (choice) {
             case 1:
-                Login.loginMenu();
+                LoginMenu.loginUser();
                 break;
             case 2:
                 Register.register();

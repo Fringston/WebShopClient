@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import static com.example.newClientWebservice.Service.UtilService.*;
 
 /**
- * Denna klass innehåller metoder för att utföra operationer på artiklar.
+ * Denna klass innehåller metoder för att utföra operationer på article-tabellen i databasen.
  * Metoderna är kopplade till olika endpoints i WebService-applikationen.
  *
  * @author Fredrik
@@ -40,6 +40,7 @@ public class ArticleService {
     /**
      * Denna metod används för att hämta alla artiklar från databasen.
      * Metoden skickar en GET request till endpoint: /webshop/articles i WebService-applikationen.
+     *
      * @return en lista med alla artiklar.
      */
     public static ArrayList<Article> getAllArticles() {
@@ -90,8 +91,9 @@ public class ArticleService {
     }
 
     /**
-     * Denna metod används för att skapa en artikel.
-     * @return en artikel.
+     * Denna metod används för att skapa en ny artikel.
+     *
+     * @return den nya artikeln.
      */
     public static Article createArticle() {
         Article article = new Article();

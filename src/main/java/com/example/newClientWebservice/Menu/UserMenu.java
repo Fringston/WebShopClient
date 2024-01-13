@@ -1,9 +1,6 @@
 package com.example.newClientWebservice.Menu;
 
-import com.example.newClientWebservice.DTO.Article;
-import com.example.newClientWebservice.DTO.Cart;
-import com.example.newClientWebservice.DTO.CartItem;
-import com.example.newClientWebservice.DTO.History;
+import com.example.newClientWebservice.DTO.*;
 import com.example.newClientWebservice.Service.ArticleService;
 import com.example.newClientWebservice.Service.CartService;
 import org.apache.hc.core5.http.ParseException;
@@ -11,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.example.newClientWebservice.Menu.ArticlesMenu.printArticlesMenu;
+import static com.example.newClientWebservice.Service.CartService.getCartIdFromUser;
 import static com.example.newClientWebservice.Service.CartService.getOneCartById;
 import static com.example.newClientWebservice.Service.HistoryService.getCurrentUserHistory;
 import static com.example.newClientWebservice.Service.UtilService.getIntInput;
@@ -23,7 +21,7 @@ import static com.example.newClientWebservice.Service.UtilService.getIntInput;
  */
 public class UserMenu {
 
-    public static void userMenu(String jwt) throws IOException, ParseException {
+    public static void userMenu(String jwt, Long cartId) throws IOException, ParseException {
 
         while (true) {
             System.out.println("\nWelcome to Fruit Haven!");
@@ -43,16 +41,16 @@ public class UserMenu {
                     printArticlesMenu();
                     break;
                 case 2:
-                    addFruitToCart(jwt);
+                    addFruitToCart(jwt, cartId);
                     break;
                 case 3:
-                    viewCart(jwt);
+                    viewCart(jwt, cartId);
                     break;
                 case 4:
-                    deleteFruitFromCart(jwt);
+                    deleteFruitFromCart(jwt, cartId);
                     break;
                 case 5:
-                    updateFruitQuantity(jwt);
+                    updateFruitQuantity(jwt, cartId);
                     break;
                 case 6:
                     getHistory(jwt);
@@ -65,7 +63,7 @@ public class UserMenu {
                     return;
                 default:
                     System.out.println("Invalid input. Please enter a number between 1 and 7.");
-                    userMenu(jwt);
+                    userMenu(jwt, cartId);
                     break;
             }
         }
@@ -79,25 +77,26 @@ public class UserMenu {
      * @throws ParseException om det blir fel med parsning av data.
      */
 
-    private static void addFruitToCart(String jwt) throws IOException, ParseException {
+    private static void addFruitToCart(String jwt, Long cartId) throws IOException, ParseException {
         printArticlesMenu();
         int articleNumber = getIntInput("\nEnter the article ID-number of a fruit to add to the basket: ");
         int quantity = getIntInput("Enter the quantity of the fruit to add to the basket: ");
 
         List<Article> articles = ArticleService.getAllArticles();
         if (articleNumber > 0 && articleNumber <= articles.size()) {
+            //Varför minus 1?
             Article selectedArticle = articles.get(articleNumber - 1);
-            int cartId = getIntInput("Enter the cart ID: ");
 
-            CartService.addArticleToCart(cartId, Math.toIntExact(selectedArticle.getId()), quantity, jwt);
+            CartService.addArticleToCart(Math.toIntExact(cartId), Math.toIntExact(selectedArticle.getId()), quantity, jwt);
         } else {
             System.out.println("Invalid article number. Please try again.");
         }
     }
 
-    private static void viewCart(String jwt) throws IOException, ParseException {
-        int cartId = getIntInput("Enter the cart ID: ");
-        Cart cart = getOneCartById(cartId, jwt);
+    private static void viewCart(String jwt, Long cartId) throws IOException, ParseException {
+
+        /*int cartId = getIntInput("Enter the cart ID: ");*/
+        Cart cart = getOneCartById(Math.toIntExact(cartId), jwt);
 
         if (cart != null) {
             System.out.println(String.format("\nCart %d belongs to %s and contains:", cart.getId(), cart.getUsername()));
@@ -112,28 +111,24 @@ public class UserMenu {
         }
     }
 
-    private static void deleteFruitFromCart(String jwt) throws IOException, ParseException {
-        int cartId = getIntInput("Enter the cart ID: ");
+    private static void deleteFruitFromCart(String jwt, Long cartId) throws IOException, ParseException {
         int articleId = getIntInput("Enter the article ID: ");
 
-        if (CartService.articleExistsInCart(cartId, articleId, jwt)) {
+        if (CartService.articleExistsInCart(Math.toIntExact(cartId), articleId, jwt)) {
 
-            CartService.deleteArticleFromCart(cartId, articleId, jwt);
-
-            System.out.println("Article deleted successfully from the cart.");
+            CartService.deleteArticleFromCart(Math.toIntExact(cartId), articleId, jwt);
         } else {
 
             System.out.println("Error: Article does not exist in the cart.");
         }
     }
 
-    private static void updateFruitQuantity(String jwt) throws IOException, ParseException {
-        int cartId = getIntInput("Enter the cart ID: ");
+    private static void updateFruitQuantity(String jwt, Long cartId) throws IOException, ParseException {
         int articleId = getIntInput("Enter the article ID: ");
         int quantity = getIntInput("Enter the new quantity: ");
 
-        if (CartService.articleExistsInCart(cartId, articleId, jwt)) {
-            CartService.updateArticleCount(cartId, quantity, articleId, jwt);
+        if (CartService.articleExistsInCart(Math.toIntExact(cartId), articleId, jwt)) {
+            CartService.updateArticleCount(Math.toIntExact(cartId), quantity, articleId, jwt);
             System.out.println("Article quantity updated successfully in the cart.");
         } else {
             System.out.println("Error: Article does not exist in the cart.");

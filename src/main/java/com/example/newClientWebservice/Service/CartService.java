@@ -2,6 +2,7 @@ package com.example.newClientWebservice.Service;
 
 import com.example.newClientWebservice.DTO.Cart;
 import com.example.newClientWebservice.DTO.CartItem;
+import com.example.newClientWebservice.DTO.LoginResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpDelete;
@@ -22,7 +23,7 @@ import java.util.List;
 
 
 /**
- * Denna klass används som en service för att utföra crud operationer.
+ * Denna klass används som en service för att utföra crud operationer på cart-tabellen i databasen.
  * Metoderna använder sig av HTTP-requests för att skicka förfrågningar till API:et.
  * Url:en specificeras i varje metod och överensstämmer med de endpoints som finns i API:et.
  * Metoderna returnerar ett svar från API:et i form av en String.
@@ -35,6 +36,7 @@ public class CartService {
      * httpClient är en instans av CloseableHttpClient.
      */
     private static final CloseableHttpClient httpClient = HttpClients.createDefault();
+
     /**
      * Denna metod används för att hämta alla carts från API:et.
      * @param jwt är en String som innehåller en JWT-token.
@@ -84,6 +86,7 @@ public class CartService {
         }
 
     }
+
     /**
      * Denna metod används för att lägga till en artikel i en cart.
      * @param cartId är id:t för den cart som artikeln ska läggas till i.
@@ -117,6 +120,7 @@ public class CartService {
 
         System.out.println(String.format("Article %s added to cart %s", articleId, cartId));
     }
+
     /**
      * Denna metod används för att uppdatera antalet artiklar i en cart.
      *
@@ -141,6 +145,7 @@ public class CartService {
 
         System.out.println(String.format("Quantity of article %d has been updated to %d in cart %d", articleId, quantity, cartId));
     }
+
     /**
      * Denna metod används för att ta bort en artikel från en cart.
      * @param cartId är id:t för den cart som artikeln ska tas bort från.
@@ -168,6 +173,7 @@ public class CartService {
 
         System.out.println(String.format("Article %s has been deleted from cart %s", articleId, cartId));
     }
+
     /**
      * Denna metod används för att hämta en användares historik från API:et.
      * @param jwt är en String som innehåller en JWT-token.
@@ -191,6 +197,7 @@ public class CartService {
             e.printStackTrace();
         }
     }
+
     /**
      * Denna metod används för att kontrollera om en artikel redan finns i en cart.
      * @param cartId är id:t för den cart som artikeln ska kontrolleras i.
@@ -209,6 +216,18 @@ public class CartService {
             }
         }
         return false;
+    }
+
+    /**
+     * Den här metoden tar emot ett LoginResponse-objekt och returnerar CartId
+     * @param loginResponse LoginResponse-objekt som innehåller ett User-objekt som i sin tur innehåller ett Cart-objekt
+     * @return CartId som är en Long eller null om CartId inte finns
+     */
+    public static Long getCartIdFromUser(LoginResponse loginResponse) {
+        if (loginResponse != null && loginResponse.getUser() != null) {
+            return loginResponse.getUser().getCart().getId();
+        }
+        return null;
     }
 
 }
