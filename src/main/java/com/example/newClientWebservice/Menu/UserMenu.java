@@ -102,7 +102,7 @@ public class UserMenu {
     private static void deleteFruitFromCart(String jwt, Long cartId) throws IOException, ParseException {
         int articleId = getIntInput("Enter the article ID: ");
 
-        if (CartService.articleExistsInCart(Math.toIntExact(cartId), articleId, jwt)) {
+        if (CartService.controlIfArticleExistsInCart(Math.toIntExact(cartId), articleId, jwt)) {
 
             CartService.deleteArticleFromCart(Math.toIntExact(cartId), articleId, jwt);
         } else {
@@ -115,7 +115,7 @@ public class UserMenu {
         int articleId = getIntInput("Enter the article ID: ");
         int quantity = getIntInput("Enter the new quantity: ");
 
-        if (CartService.articleExistsInCart(Math.toIntExact(cartId), articleId, jwt)) {
+        if (CartService.controlIfArticleExistsInCart(Math.toIntExact(cartId), articleId, jwt)) {
             CartService.updateArticleCount(Math.toIntExact(cartId), quantity, articleId, jwt);
             System.out.println("Article quantity updated successfully in the cart.");
         } else {
