@@ -14,6 +14,7 @@ import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 
 import java.io.IOException;
 
@@ -38,26 +39,30 @@ public class UserService {
      * @param jwt är en string som är en token som används för att autentisera användaren
      * @return är en arraylist av User objekt
      */
-    public static List<User> getUsers(String jwt) throws IOException, ParseException { // för admin
-        // skapa ett objekt av http get klassen
-        HttpGet request = new HttpGet("http://localhost:8081/webshop/user");
-        // inkludera en authorization metod till request
-        request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
-        // exekvera request
-        CloseableHttpResponse response = httpClient.execute(request);
-        // visa upp response payload i console
-        if (response.getCode() != 200) {
-            System.out.println("Something went wrong");
-            return null;
-        }
+    public static List<User> getUsers(String jwt) {
 
-        // visa upp response payload i console
-        HttpEntity entity = response.getEntity();
-        // skapa ett objekt av ObjectMapper klassen
-        ObjectMapper mapper = new ObjectMapper();
-        // skapar en arraylist av User objekt för att kunna loopa igenom och skriva ut alla users
-        return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<User>>() {
-        });
+        try {
+
+            HttpGet request = new HttpGet("http://localhost:8081/webshop/user");
+
+            request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+            CloseableHttpResponse response = httpClient.execute(request);
+
+            if (response.getCode() != 200) {
+                System.out.println("Something went wrong with the request: " + response.getCode());
+                return null;
+            }
+
+            HttpEntity entity = response.getEntity();
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<User>>() {
+            });
+        } catch (IOException | ParseException e) {
+            System.out.println("Something went wrong: " + e.getMessage());
+        } return null;
     }
 
     /**
@@ -95,7 +100,7 @@ public class UserService {
         } catch (JsonProcessingException e) {
             System.out.println("Json Processing Error: " + e.getMessage());
         } catch (IOException e) {
-            System.out.println("IO Exception Error: " + e.getMessage());
+            System.out.println("IO Error: " + e.getMessage());
         } catch (ParseException e) {
             System.out.println("Parse Error: " + e.getMessage());
         }

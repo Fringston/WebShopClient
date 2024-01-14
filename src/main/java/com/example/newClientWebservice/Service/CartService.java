@@ -4,6 +4,7 @@ import com.example.newClientWebservice.DTO.Cart;
 import com.example.newClientWebservice.DTO.CartItem;
 import com.example.newClientWebservice.DTO.LoginResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpDelete;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -27,6 +28,7 @@ import java.util.List;
  * Metoderna använder sig av HTTP-requests för att skicka förfrågningar till API:et.
  * Url:en specificeras i varje metod och överensstämmer med de endpoints som finns i API:et.
  * Metoderna returnerar ett svar från API:et i form av en String.
+ *
  * @author Clara Brorson
  */
 public class CartService {
@@ -41,7 +43,7 @@ public class CartService {
      * Denna metod används för att hämta alla carts från API:et.
      * @param jwt är en String som innehåller en JWT-token.
      */
-    public static List<Cart> getAllCarts(String jwt) throws IOException, ParseException {
+    public static List<Cart> getAllCarts(String jwt) {
 
         HttpGet request = new HttpGet("http://localhost:8081/webshop/cart");
 
@@ -49,20 +51,23 @@ public class CartService {
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             if (response.getCode() != 200) {
-                System.out.println("Something went wrong");
-                System.out.println(response.getCode());
+                System.out.println("Something went wrong with the request" + response.getCode());
                 return null;
             }
 
             HttpEntity entity = response.getEntity();
-
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(EntityUtils.toString(entity), new TypeReference<List<Cart>>() {});
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+
+        } catch (JsonMappingException e) {
+            System.out.println("Json Mapping Error: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IO Error: " + e.getMessage());
+        } catch (ParseException e) {
+            System.out.println("Parse Error: " + e.getMessage());
+        } return null;
     }
+
     /**
      * Denna metod används för att hämta en cart med ett specifikt id från API:et.
      * @param id är id:t för den cart som ska hämtas.
