@@ -4,6 +4,7 @@ import com.example.newClientWebservice.DTO.LoginResponse;
 import com.example.newClientWebservice.DTO.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -31,6 +32,7 @@ import static com.example.newClientWebservice.Service.UtilService.*;
  */
 public class UserService {
 
+
     private static final CloseableHttpClient httpClient = HttpClients.createDefault();
 
     /**
@@ -42,25 +44,32 @@ public class UserService {
     public static List<User> getUsers(String jwt) {
 
         try {
-
             HttpGet request = new HttpGet("http://localhost:8081/webshop/user");
-
             request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
-            CloseableHttpResponse response = httpClient.execute(request);
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
 
-            if (response.getCode() != 200) {
-                System.out.println("Something went wrong with the request: " + response.getCode());
-                return null;
+                if (response.getCode() != 200) {
+                    System.out.println("Something went wrong with the request: " + response.getCode());
+                    return null;
+                }
+
+                HttpEntity entity = response.getEntity();
+
+                ObjectMapper mapper = new ObjectMapper();
+
+                return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<User>>() {});
+
+            } catch (JsonMappingException e) {
+                System.out.println("Json Mapping Error: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("Io Error: " + e.getMessage());
+            } catch (ParseException e) {
+                System.out.println("Parse Error: " + e.getMessage());
             }
+            return null;
 
-            HttpEntity entity = response.getEntity();
-
-            ObjectMapper mapper = new ObjectMapper();
-
-            return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<User>>() {
-            });
-        } catch (IOException | ParseException e) {
+        } catch (Exception e) {
             System.out.println("Something went wrong: " + e.getMessage());
         } return null;
     }
@@ -78,10 +87,9 @@ public class UserService {
             User newUser = new User(0L, username, password);
 
             HttpPost request = new HttpPost("http://localhost:8081/webshop/auth/register");
-
             request.setEntity(createPayload(newUser));
 
-            CloseableHttpResponse response = httpClient.execute(request);
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
 
             if (response.getCode() != 200) {
                 System.out.println("Something went wrong with the request: " + response.getCode());
@@ -92,8 +100,7 @@ public class UserService {
 
             ObjectMapper mapper = new ObjectMapper();
 
-            User responseUser = mapper.readValue(EntityUtils.toString(payload), new TypeReference<User>() {
-            });
+            User responseUser = mapper.readValue(EntityUtils.toString(payload), new TypeReference<User>() {});
 
             System.out.printf("User %s has been created with the user-id: %d%n", responseUser.getUsername(), responseUser.getId());
 
@@ -103,6 +110,10 @@ public class UserService {
             System.out.println("IO Error: " + e.getMessage());
         } catch (ParseException e) {
             System.out.println("Parse Error: " + e.getMessage());
+            }
+
+        } catch (Exception e) {
+            System.out.println("Something went wrong: " + e.getMessage());
         }
     }
 
@@ -119,13 +130,11 @@ public class UserService {
 
             User loginUser = new User(0L, username, password);
 
-
             HttpPost request = new HttpPost("http://localhost:8081/webshop/auth/login");
-
             request.setEntity(createPayload(loginUser));
 
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
 
-            CloseableHttpResponse response = httpClient.execute(request);
             if (response.getCode() != 200) {
                 System.out.println("Something went wrong with the request: " + response.getCode());
                 return null;
@@ -133,10 +142,8 @@ public class UserService {
 
             HttpEntity payload = response.getEntity();
 
-
             ObjectMapper mapper = new ObjectMapper();
-            LoginResponse loginResponse = mapper.readValue(EntityUtils.toString(payload), new TypeReference<LoginResponse>() {
-            });
+            LoginResponse loginResponse = mapper.readValue(EntityUtils.toString(payload), new TypeReference<LoginResponse>() {});
             if (loginResponse.getUser() == null) {
                 System.out.println("Wrong username or password. Please try again.");
                 return null;
@@ -151,6 +158,10 @@ public class UserService {
             System.out.println("IO Exception Error: " + e.getMessage());
         } catch (ParseException e) {
             System.out.println("Parse Error: " + e.getMessage());
+        } return null;
+
+    } catch (Exception e) {
+            System.out.println("Something went wrong: " + e.getMessage());
         } return null;
     }
 }
