@@ -24,7 +24,7 @@ public class LoginMenu {
      * En if sats kontrollerar om användaren har admin-roll genom att anropa metoden isAdmin.
      * Beroende på om användaren har admin-roll eller inte, visas antingen admin-menyn eller användarmenyn.
      */
-    public static void loginUser() throws IOException, ParseException {
+    public static void loginUser() {
         LoginResponse loginResponse = login();
         Long cartId = getCartIdFromUser(loginResponse);
 

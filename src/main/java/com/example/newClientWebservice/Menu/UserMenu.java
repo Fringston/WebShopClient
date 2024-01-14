@@ -16,11 +16,12 @@ import static com.example.newClientWebservice.Service.UtilService.getIntInput;
  * Denna klass används för att skapa en meny för användare.
  * Här kan användaren välja att lägga till, ta bort och uppdatera artiklar i kundkorgen.
  * Den innefattar metoder som anropar metoder från olika Service-klasser.
+ *
  * @author Clara Brorson
  */
 public class UserMenu {
 
-    public static void userMenu(String jwt, Long cartId) throws IOException, ParseException {
+    public static void userMenu(String jwt, Long cartId) {
 
         while (true) {
             System.out.println("\nWelcome to Fruit Haven!");
@@ -60,10 +61,8 @@ public class UserMenu {
      *
      * @param jwt är en sträng som används för att autentisera användaren.
      * @param cartId är id:t för den kundkorg som användaren har.
-     * @throws IOException om det blir fel med inläsning av data.
-     * @throws ParseException om det blir fel med parsning av data.
      */
-    private static void addFruitToCart(String jwt, Long cartId) throws IOException, ParseException {
+    private static void addFruitToCart(String jwt, Long cartId) {
         printArticlesMenu();
         int articleId = getIntInput("\nEnter the article ID-number of a fruit to add to the basket: ");
         int quantity = getIntInput("Enter the quantity of the fruit to add to the basket: ");
@@ -82,8 +81,9 @@ public class UserMenu {
         }
     }
 
-    private static void viewCart(String jwt, Long cartId) throws IOException, ParseException {
+    private static void viewCart(String jwt, Long cartId) {
 
+        try {
         Cart cart = getOneCartById(Math.toIntExact(cartId), jwt);
 
         if (cart != null) {
@@ -97,9 +97,14 @@ public class UserMenu {
         } else {
             System.out.println("Cart not found or an error occurred.");
         }
+    } catch (ArithmeticException e) {
+            System.out.println("Error: Cart ID is too large to be represented as an int.");
+        }
     }
 
-    private static void deleteFruitFromCart(String jwt, Long cartId) throws IOException, ParseException {
+    private static void deleteFruitFromCart(String jwt, Long cartId) {
+
+        try {
         int articleId = getIntInput("Enter the article ID: ");
 
         if (CartService.controlIfArticleExistsInCart(Math.toIntExact(cartId), articleId, jwt)) {
@@ -109,9 +114,14 @@ public class UserMenu {
 
             System.out.println("Error: Article does not exist in the cart.");
         }
+    } catch (ArithmeticException e) {
+            System.out.println("Error: Cart ID is too large to be represented as an int.");
+        }
     }
 
-    private static void updateFruitQuantity(String jwt, Long cartId) throws IOException, ParseException {
+    private static void updateFruitQuantity(String jwt, Long cartId) {
+
+        try {
         int articleId = getIntInput("Enter the article ID: ");
         int quantity = getIntInput("Enter the new quantity: ");
 
@@ -121,20 +131,23 @@ public class UserMenu {
         } else {
             System.out.println("Error: Article does not exist in the cart.");
         }
+    } catch (ArithmeticException e) {
+            System.out.println("Error: Cart ID is too large to be represented as an int.");
+        }
     }
 
     private static void getHistory(String jwt) {
         List<History> histories = getCurrentUserHistory(jwt);
-        System.out.println("\nPurchased Articles:\n");
+        System.out.println("\nPurchased articles:");
         assert histories != null;
         for (History history : histories) {
             for (Article article : history.getPurchasedArticles()) {
                 System.out.printf(
-                        "History id: %d\n User: %s\n article id: %d\n name: %s\n cost: %d\n description: %s\n%n",
-                        history.getId(), history.getUser().getUsername(), article.getId(), article.getName(), article.getCost(), article.getDescription()
+                        "\nHistory id: %d\n User: %s\n Article name: %s\n Cost: %d\n Description: %s\n",
+                        history.getId(), history.getUser().getUsername(), article.getName(), article.getCost(), article.getDescription()
                 );
             }
-            System.out.printf("Total cost: %d%n", history.getTotalCost());
+            System.out.printf("Total cost: %d\n", history.getTotalCost());
         }
     }
 

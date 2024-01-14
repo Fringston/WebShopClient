@@ -24,11 +24,10 @@ public class AdminMenu {
 
     /**
      * Den här metoden visar en meny för en administratör.
+     *
      * @param jwt är en String som innehåller en JWT-token.
-     * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
-     * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
      */
-    public static void adminChoice (String jwt, Long cartId) throws IOException, ParseException {
+    public static void adminChoice (String jwt, Long cartId) {
         while (true) {
             System.out.println("\nChoose an option:");
             System.out.println("1. Got to user menu");
@@ -52,12 +51,11 @@ public class AdminMenu {
 
     /**
      * Den här metoden visar en meny för en administratör.
+     *
      * @param jwt är en String som innehåller en JWT-token.
-     * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
-     * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
      */
 
-    public static void adminMenu(String jwt, Long cartId) throws IOException, ParseException {
+    public static void adminMenu(String jwt, Long cartId) {
         while (true) {
             System.out.println("\nAdmin menu:\n");
             System.out.println("1. View all current carts");
@@ -125,7 +123,7 @@ public class AdminMenu {
        for (History history : histories) {
            for (Article article : history.getPurchasedArticles()) {
                System.out.printf(
-                       "History id: %d \n  User: %s \n  name: %s \n  cost: %d \n  description: %s \n %n",
+                       "\nHistory id: %d \n  User: %s \n  Article name: %s \n  Cost: %d \n  Description: %s \n",
                        history.getId(), history.getUser().getUsername(), article.getName(), article.getCost(), article.getDescription()
                );
            }
@@ -133,14 +131,15 @@ public class AdminMenu {
    }
 
    /**
-    * Denna metode visar alla användare.
+    * Denna metod visar alla användare.
+    *
     * @param jwt är en String som innehåller en JWT-token.
-    * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
-    * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
     */
-   public static void getAllUsers(String jwt) throws IOException, ParseException {
-        List<User> users = getUsers(jwt);
-       assert users != null;
+   public static void getAllUsers(String jwt) {
+       List<User> users = getUsers(jwt);
+       if (users == null) {
+           throw new RuntimeException("Error: users is null");
+       }
        for (User user : users) {
             System.out.printf("Id: %d\n Username: %s%n",user.getId(), user.getUsername());
         }
@@ -156,11 +155,10 @@ public class AdminMenu {
 
     /**
      * Den här metoden uppdaterar en artikel.
+     *
      * @param jwt är en String som innehåller en JWT-token.
-     * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
-     * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
      */
-   public static Void patchArticle(String jwt) throws IOException, ParseException {
+   public static Void patchArticle(String jwt) {
 
         int id = getIntInput("Enter the id of the article you want to update: ");
 
@@ -195,12 +193,11 @@ public class AdminMenu {
     }
 
     /**
-        * Den här metoden tar bort en artikel.
-        * @param jwt är en String som innehåller en JWT-token.
-        * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
-        * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
-        */
-    public static void removeArticleFromDB(String jwt, Long cartId) throws IOException, ParseException {
+     * Den här metoden tar bort en artikel.
+     *
+     * @param jwt är en String som innehåller en JWT-token.
+     */
+    public static void removeArticleFromDB(String jwt, Long cartId) {
 
         int id = getIntInput("Enter the id of the article you want to delete: ");
 
@@ -208,8 +205,7 @@ public class AdminMenu {
 
         if (articleAboutToBeDeleted == null) {
             System.out.println("No article with that id exists.");
-        }
-        else {
+        } else {
             System.out.println("Are you sure you want to delete " + articleAboutToBeDeleted.getName() + "?");
             System.out.println("1. Yes");
             System.out.println("2. No");

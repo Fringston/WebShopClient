@@ -11,14 +11,17 @@ import java.io.IOException;
  **/
 
 public class MainMenu {
-   private static boolean isRunning = true; // global variabel så att vi kan använda den för att stänga av programmet
+
+    /**
+     * Denna variabel är en boolean som används för att stänga av programmet
+     */
+    private static boolean isRunning = true;
 
     /**
      * Denna metod som beter sig som en hub för att leda till andra metoder
-     * @throws IOException ParseException är exceptions som kastas om det blir fel
      */
 
-    public static void runMeny() throws IOException, ParseException {
+    public static void runMeny() {
         while (isRunning) {
                 printMainMenu();
             int choice = UtilService.getIntInput("Enter your choice: ");
@@ -43,7 +46,7 @@ public class MainMenu {
      * @param choice är en int variabel som tar emot användarens val
      */
 
-    public static void userChoice(int choice) throws IOException, ParseException {
+    public static void userChoice(int choice) {
         switch (choice) {
             case 1 -> LoginMenu.loginUser();
             case 2 -> Register.register();
