@@ -46,7 +46,6 @@ public class CartService {
     public static List<Cart> getAllCarts(String jwt) {
 
         HttpGet request = new HttpGet("http://localhost:8081/webshop/cart");
-
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
@@ -73,14 +72,14 @@ public class CartService {
      * @param id är id:t för den cart som ska hämtas.
      * @param jwt är en String som innehåller en JWT-token.
      */
-    public static Cart getOneCartById(int id, String jwt) throws IOException, ParseException {
+    public static Cart getOneCartById(int id, String jwt) {
+
         HttpGet request = new HttpGet(String.format("http://localhost:8081/webshop/cart/%d", id));
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             if (response.getCode() != 200) {
-                System.out.println("Something went wrong");
-                System.out.println("Error code: " + response.getCode());
+                System.out.println("Something went wrong with the request" + response.getCode());
                 return null;
             }
 
@@ -88,8 +87,14 @@ public class CartService {
             String responseBody = EntityUtils.toString(entity);
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(responseBody, new TypeReference<Cart>() {});
-        }
 
+        } catch (JsonMappingException e) {
+            System.out.println("Json Mapping Error: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IO Error: " + e.getMessage());
+        } catch (ParseException e) {
+            System.out.println("Parse Error: " + e.getMessage());
+        } return null;
     }
 
     /**

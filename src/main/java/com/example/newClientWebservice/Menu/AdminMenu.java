@@ -89,10 +89,8 @@ public class AdminMenu {
     /**
      * Den här metoden visar alla varukorgar som finns för tillfället.
      * @param jwt är en String som innehåller en JWT-token.
-     * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
-     * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
      */
-    public static void getAllCarts(String jwt) throws IOException, ParseException {
+    public static void getAllCarts(String jwt) {
         List<Cart> carts = CartService.getAllCarts(jwt);
         System.out.println("\nAll current carts:\n");
         assert carts != null;
