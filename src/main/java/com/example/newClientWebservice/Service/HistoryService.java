@@ -2,6 +2,7 @@ package com.example.newClientWebservice.Service;
 
 import com.example.newClientWebservice.DTO.History;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- *  Denna klass hämtar användarens köphistorik från databasen
+ * Denna klass hämtar användarens köphistorik från databasen
  *
  * @author jafar
  */
@@ -28,70 +29,77 @@ public class HistoryService {
      * Denna metod hämtar all köphistorik från databasen.
      *
      * @param jwt är en string som är en token som används för att autentisera användaren
-     * @return histories är en arraylist av History objekt
-     * */
+     * @return en arraylist av History objekt
+     */
     public static ArrayList<History> getAllHistory(String jwt) {
 
-        HttpGet request = new HttpGet("http://localhost:8081/webshop/history");
+        try {
+            HttpGet request = new HttpGet("http://localhost:8081/webshop/history");
+            request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
-        request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
 
-        try (CloseableHttpResponse response = httpClient.execute(request)) {
-            if (response.getCode() != 200) {
-                System.out.println("Error");
-                return null;
+                if (response.getCode() != 200) {
+                    System.out.println("Error occurred. HTTP response code: " + response.getCode());
+                    return null;
+                }
+
+                HttpEntity entity = response.getEntity();
+
+                ObjectMapper mapper = new ObjectMapper();
+                return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<History>>() {
+                });
+            } catch (JsonMappingException e) {
+                System.out.println("Mapping Error: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IO Error: " + e.getMessage());
+            } catch (ParseException e) {
+                System.out.println("Parse Error: " + e.getMessage());
             }
+            return null;
 
-            HttpEntity entity = response.getEntity();
-
-            ObjectMapper mapper = new ObjectMapper();
-           return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<History>>() {
-            });
-
-//            System.out.println("Histories:");
-//            // skriv ut alla köphistorik
-//            for (History history : histories) {
-//                System.out.println(String.format(
-//                        "  History id: %d \n totalCost: %d \n article: %s \n user: %s",
-//                        history.getId(), history.getTotalCost(), history.getPurchasedArticles(), history.getUser().getUsername()
-//                ));
-//            }
-
-//            return histories;
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
             return null;
         }
     }
+
+
     /**
      * Denna metod hämtar köphistorik från databasen från den aktuella användaren
      *
      * @param jwt är en string som är en token som används för att autentisera användaren
-     * @return articles är en arraylist av Article objekt, det är alla artiklar som köpts av den aktuella användaren
-     * */
+     * @return en arraylist av Article objekt, det är alla artiklar som köpts av den aktuella användaren
+     */
     public static ArrayList<History> getCurrentUserHistory(String jwt) {
-        HttpGet request = new HttpGet("http://localhost:8081/webshop/history/currentUserHistory");
 
-        // inkludera en authorization metod till request
-        request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+        try {
+            HttpGet request = new HttpGet("http://localhost:8081/webshop/history/currentUserHistory");
 
-        // Exekvera request
-        try (CloseableHttpResponse response = httpClient.execute(request)) {
-            if (response.getCode() != 200) {
-                System.out.println("Error");
-                return null;
+            request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
+                if (response.getCode() != 200) {
+                    System.out.println("Error");
+                    return null;
+                }
+
+                HttpEntity entity = response.getEntity();
+
+                ObjectMapper mapper = new ObjectMapper();
+                return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<History>>() {
+                });
+
+            } catch (JsonMappingException e) {
+                System.out.println("Mapping Error: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IO Error: " + e.getMessage());
+            } catch (ParseException e) {
+                System.out.println("Parse Error: " + e.getMessage());
             }
-
-            // visar upp response payload i console
-            HttpEntity entity = response.getEntity();
-
-            // konvertera response payload till ett användbart objekt
-            ObjectMapper mapper = new ObjectMapper();
-           return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<History>>() {
-            });
-
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
             return null;
         }
     }
