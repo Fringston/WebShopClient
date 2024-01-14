@@ -2,6 +2,7 @@ package com.example.newClientWebservice.Service;
 
 import com.example.newClientWebservice.DTO.Article;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpDelete;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -44,25 +45,37 @@ public class ArticleService {
      * @return en lista med alla artiklar.
      */
     public static ArrayList<Article> getAllArticles() {
-    try {
-        HttpGet request = new HttpGet("http://localhost:8081/webshop/articles");
-        CloseableHttpResponse response = httpClient.execute(request);
 
-        if (response.getCode() != 200) {
-            System.out.println("Error occurred. HTTP response code: " + response.getCode());
+        try {
+            HttpGet request = new HttpGet("http://localhost:8081/webshop/articles");
+
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
+
+                if (response.getCode() != 200) {
+                    System.out.println("Error occurred. HTTP response code: " + response.getCode());
+                    return null;
+                }
+
+                HttpEntity entity = response.getEntity();
+                ObjectMapper mapper = new ObjectMapper();
+
+                return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<Article>>() {
+                });
+
+            } catch (JsonMappingException e) {
+                System.out.println("Mapping Error: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IO Error: " + e.getMessage());
+            } catch (ParseException e) {
+                System.out.println("Parse Error: " + e.getMessage());
+            }
             return null;
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        HttpEntity entity = response.getEntity();
-        ObjectMapper mapper = new ObjectMapper();
-
-        return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<Article>>() {});
-    } catch (IOException | ParseException e) {
-        System.out.println("Error: " + e.getMessage());
-        e.printStackTrace();
         return null;
     }
-}
 
 
     /**
@@ -71,23 +84,38 @@ public class ArticleService {
      * @param id är id:t för den artikel som ska hämtas.
      * @return en artikel med det specifika id:t.
      */
-    public static Article getOneArticle(int id) throws IOException, ParseException {
+    public static Article getOneArticle(int id) {
 
-        HttpGet request = new HttpGet(String.format("http://localhost:8081/webshop/articles/%d", id));
+        try {
+            HttpGet request = new HttpGet(String.format("http://localhost:8081/webshop/articles/%d", id));
 
-        CloseableHttpResponse response = httpClient.execute(request);
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
 
-        if (response.getCode() != 200) {
-            System.out.println("Error occurred. HTTP response code: " + response.getCode());
+                if (response.getCode() != 200) {
+                    System.out.println("Error occurred. HTTP response code: " + response.getCode());
+                    return null;
+                }
+                HttpEntity entity = response.getEntity();
+
+                ObjectMapper mapper = new ObjectMapper();
+                Article article = mapper.readValue(EntityUtils.toString(entity), new TypeReference<Article>() {});
+
+                System.out.printf("Article: %s \n Price: %d%n", article.getName(), article.getCost());
+                return article;
+
+            } catch (JsonMappingException e) {
+                System.out.println("Mapping Error: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IO Error: " + e.getMessage());
+            } catch (ParseException e) {
+                System.out.println("Parse Error: " + e.getMessage());
+            }
             return null;
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        HttpEntity entity = response.getEntity();
-
-        ObjectMapper mapper = new ObjectMapper();
-        Article article = mapper.readValue(EntityUtils.toString(entity), new TypeReference<Article>() {});
-
-        System.out.printf("Article: %s \n Price: %d%n", article.getName(), article.getCost());
-        return article;
+        return null;
     }
 
     /**
@@ -113,12 +141,12 @@ public class ArticleService {
     /**
      * Denna metod används för att lägga till en artikel i databasen.
      * Metoden skickar en POST request till endpoint: /webshop/articles i WebService-applikationen.
+     *
      * @param jwt är en String som innehåller en JWT-token.
-     * @throws IOException kastar ett undantag om det blir problem med inläsning från användaren.
-     * @throws ParseException kastar ett undantag om det blir problem med parsning av JSON.
      */
-    public static void addArticle(String jwt) throws IOException, ParseException {
+    public static void addArticle(String jwt) {
 
+        try {
        Article newArticle = createArticle();
 
         HttpPost request = new HttpPost("http://localhost:8081/webshop/articles");
@@ -130,10 +158,10 @@ public class ArticleService {
         request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
-        CloseableHttpResponse response = httpClient.execute(request);
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
 
         if (response.getCode() != 200) {
-            System.out.println("Error occurred: " + response.toString());
+            System.out.println("Error occurred. HTTP response code: " + response.getCode());
             return;
         }
 
@@ -147,6 +175,16 @@ public class ArticleService {
         } else {
             System.out.println("Something went wrong");
         }
+    } catch (JsonMappingException e) {
+        System.out.println("Mapping Error: " + e.getMessage());
+    } catch (IOException e) {
+        System.out.println("IO Error: " + e.getMessage());
+    } catch (ParseException e) {
+        System.out.println("Parse Error: " + e.getMessage());
+    }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     /**
@@ -158,8 +196,9 @@ public class ArticleService {
      * @param jwt är en String som innehåller en JWT-token.
      * @return den uppdaterade artikeln.
      */
-    public static Void updateArticle(int id, Article existingArticle, Article article, String jwt) throws IOException, ParseException {
+    public static Void updateArticle(int id, Article existingArticle, Article article, String jwt) {
 
+        try {
         HttpPatch request = new HttpPatch(String.format("http://localhost:8081/webshop/articles/%d", id));
 
         if (article.getName() == null) {
@@ -179,10 +218,10 @@ public class ArticleService {
 
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
-        CloseableHttpResponse response = httpClient.execute(request);
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
 
         if (response.getCode() != 200) {
-            System.out.println("Error occurred: " + response);
+            System.out.println("Error occurred. HTTP response code: " + response.getCode());
             return null;
         }
 
@@ -194,10 +233,26 @@ public class ArticleService {
                 && responseArticle.getCost() == article.getCost()
                 && (responseArticle.getDescription() == null ? article.getDescription() == null : responseArticle.getDescription().equals(article.getDescription()))
                 ) {
-            System.out.println(String.format("The article: %s, has been updated", responseArticle.getName()));
+            System.out.printf("The article: %s, has been updated", responseArticle.getName());
         } else {
             System.out.println("Something went wrong");
         }
+        return null;
+
+        } catch (JsonMappingException e) {
+        System.out.println("Mapping Error: " + e.getMessage());
+
+        } catch (IOException e) {
+        System.out.println("IO Error: " + e.getMessage());
+
+        } catch (ParseException e) {
+        System.out.println("Parse Error: " + e.getMessage());
+        }
+        return null;
+
+    } catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }
         return null;
     }
 
@@ -207,19 +262,27 @@ public class ArticleService {
      * @param id är id:t för den artikel som ska tas bort.
      * @param jwt är en String som innehåller en JWT-token.
      */
-    public static void deleteArticle(int id, String jwt) throws IOException, ParseException {
+    public static void deleteArticle(int id, String jwt) {
 
+        try {
         HttpDelete request = new HttpDelete(String.format("http://localhost:8081/webshop/articles/%d", id));
 
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
-        CloseableHttpResponse response = httpClient.execute(request);
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
 
         if (response.getCode() != 200) {
-            System.out.println("Error occurred");
+            System.out.println("Error occurred. HTTP response code: " + response.getCode());
             return;
         }
-
         System.out.println("The article has been deleted");
+
+    } catch (IOException e) {
+        System.out.println("IO Error: " + e.getMessage());
+        }
+
+    } catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+        }
     }
 }

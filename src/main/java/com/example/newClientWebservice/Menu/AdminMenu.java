@@ -151,11 +151,7 @@ public class AdminMenu {
      * @param jwt är en String som innehåller en JWT-token.
      */
     public static void addNewArticle(String jwt){
-        try {
             addArticle(jwt);
-        } catch (IOException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
     }
 
     /**

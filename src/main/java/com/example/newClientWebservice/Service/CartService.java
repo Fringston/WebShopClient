@@ -51,7 +51,7 @@ public class CartService {
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             if (response.getCode() != 200) {
-                System.out.println("Something went wrong with the request: " + response.getCode());
+                System.out.println("Error occurred. HTTP response code: " + response.getCode());
                 return null;
             }
 
@@ -85,7 +85,7 @@ public class CartService {
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             if (response.getCode() != 200) {
-                System.out.println("Something went wrong with the request: " + response.getCode());
+                System.out.println("Error occurred. HTTP response code: " + response.getCode());
                 return null;
             }
 
@@ -129,7 +129,7 @@ public class CartService {
         try (CloseableHttpResponse response = httpClient.execute(request)) {
 
         if (response.getCode() != 200) {
-            System.out.println("Something went wrong with the request: " + response.getCode());
+            System.out.println("Error occurred. HTTP response code: " + response.getCode());
             return;
         }
 
@@ -164,7 +164,7 @@ public class CartService {
         try (CloseableHttpResponse response = httpClient.execute(request)) {
 
         if (response.getCode() != 200) {
-            System.out.println("Something went wrong with the request: " + response.getCode());
+            System.out.println("Error occurred. HTTP response code: " + response.getCode());
             return;
         }
 
@@ -202,7 +202,7 @@ public class CartService {
         try (CloseableHttpResponse response = httpClient.execute(request)) {
 
         if (response.getCode() != 200) {
-            System.out.println("Something went wrong with the request: " + response.getCode());
+            System.out.println("Error occurred. HTTP response code: " + response.getCode());
             return;
         }
 
@@ -238,7 +238,7 @@ public class CartService {
 
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 if (response.getCode() != 200) {
-                    System.out.println("Something went wrong with the request: " + response.getCode());
+                    System.out.println("Error occurred. HTTP response code: " + response.getCode());
                     return;
                 }
                 System.out.println("Purchase completed successfully.");
