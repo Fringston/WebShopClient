@@ -62,13 +62,17 @@ public class UserMenu {
      * @param jwt är en sträng som används för att autentisera användaren.
      * @param cartId är id:t för den kundkorg som användaren har.
      */
+
     private static void addFruitToCart(String jwt, Long cartId) {
         printArticlesMenu();
         int articleId = getIntInput("\nEnter the article ID-number of a fruit to add to the basket: ");
         int quantity = getIntInput("Enter the quantity of the fruit to add to the basket: ");
 
         List<Article> articles = ArticleService.getAllArticles();
-        assert articles != null;
+        if (articles == null) {
+            System.out.println("Error: No articles found.");
+            return;
+        }
         Article selectedArticle = articles.stream()
                 .filter(article -> article.getId() == articleId)
                 .findFirst()
@@ -138,8 +142,11 @@ public class UserMenu {
 
     private static void getHistory(String jwt) {
         List<History> histories = getCurrentUserHistory(jwt);
+        if (histories == null || histories.isEmpty()) {
+            System.out.println("No purchase history found.");
+            return;
+        }
         System.out.println("\nPurchased articles:");
-        assert histories != null;
         for (History history : histories) {
             for (Article article : history.getPurchasedArticles()) {
                 System.out.printf(

@@ -87,8 +87,7 @@ public class HistoryService {
                 HttpEntity entity = response.getEntity();
 
                 ObjectMapper mapper = new ObjectMapper();
-                return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<History>>() {
-                });
+                return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<History>>() {});
 
             } catch (JsonMappingException e) {
                 System.out.println("Mapping Error: " + e.getMessage());

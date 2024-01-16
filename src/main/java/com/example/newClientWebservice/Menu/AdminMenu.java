@@ -90,8 +90,11 @@ public class AdminMenu {
      */
     public static void getAllCarts(String jwt) {
         List<Cart> carts = CartService.getAllCarts(jwt);
+        if (carts == null) {
+            System.out.println("Error: No carts found.");
+            return;
+        }
         System.out.println("\nAll current carts:\n");
-        assert carts != null;
         for (Cart cart : carts) {
             if (cart != null) {
                 System.out.println("\u001B[4m" + "Cart ID: " + cart.getId() + "\u001B[0m" + "\nUser: " + cart.getUsername());
@@ -118,8 +121,11 @@ public class AdminMenu {
     */
    public static void getAllHistories(String jwt) {
        List<History> histories = getAllHistory(jwt);
+       if (histories == null) {
+           System.out.println("Error: No purchase histories found.");
+           return;
+       }
        System.out.println("\nPurchase histories:\n");
-       assert histories != null;
        for (History history : histories) {
            for (Article article : history.getPurchasedArticles()) {
                System.out.printf(
@@ -138,7 +144,8 @@ public class AdminMenu {
    public static void getAllUsers(String jwt) {
        List<User> users = getUsers(jwt);
        if (users == null) {
-           throw new RuntimeException("Error: users is null");
+           System.out.println("Error: No users found.");
+           return;
        }
        for (User user : users) {
             System.out.printf("Id: %d\n Username: %s%n",user.getId(), user.getUsername());

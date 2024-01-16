@@ -20,7 +20,10 @@ public class ArticlesMenu {
     public static void printArticlesMenu() {
         System.out.println("\nArticles Menu \n");
         List<Article> articles = ArticleService.getAllArticles();
-        assert articles != null;
+        if (articles == null) {
+            System.out.println("Error: No articles found.");
+            return;
+        }
         for (Article article : articles) {
             System.out.printf("Article id: %d\n Article: %s \n Price: %d \n Description: %s \n%n",
                      article.getId(), article.getName(), article.getCost(), article.getDescription());
