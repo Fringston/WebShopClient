@@ -65,6 +65,32 @@ public class UtilService {
     }
 
     /**
+     * Denna metod används för att läsa in long-input från användaren via konsolen.
+     * @param prompt är en String som innehåller meddelandet som ska visas för användaren innan inmatning läses in.
+     * @return ett heltal som lästs in från användaren.
+     */
+    public static Long getLongInput(String prompt) {
+        Scanner scan = new Scanner(System.in);
+        System.out.print(prompt);
+
+        try {
+            long input = scan.nextLong();
+
+            if (input == 0) {
+                System.out.println("Try again");
+                return getLongInput(prompt);
+            }
+
+            return input;
+
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.\n");
+            scan.next(); // discard the invalid input
+            return getLongInput(prompt);
+        }
+    }
+
+    /**
      * Denna metod används för att konvertera ett Java-objekt till en JSON-sträng och skapa en StringEntity som kan användas som payload i en HTTP-request.
      *
      * @param object är det Java-objekt som ska konverteras till en JSON-sträng.

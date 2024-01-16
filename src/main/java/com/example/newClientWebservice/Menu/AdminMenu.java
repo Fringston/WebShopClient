@@ -167,7 +167,7 @@ public class AdminMenu {
      */
    public static Void patchArticle(String jwt) {
 
-        int id = getIntInput("Enter the id of the article you want to update: ");
+        Long id = getLongInput("Enter the id of the article you want to update: ");
 
         Article existingArticle = getOneArticle(id);
 
@@ -206,7 +206,7 @@ public class AdminMenu {
      */
     public static void removeArticleFromDB(String jwt, Long cartId) {
 
-        int id = getIntInput("Enter the id of the article you want to delete: ");
+        Long id = getLongInput("Enter the id of the article you want to delete: ");
 
         Article articleAboutToBeDeleted = getOneArticle(id);
 

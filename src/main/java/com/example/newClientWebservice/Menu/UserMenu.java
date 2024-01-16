@@ -11,6 +11,7 @@ import static com.example.newClientWebservice.Menu.ArticlesMenu.printArticlesMen
 import static com.example.newClientWebservice.Service.CartService.getOneCartById;
 import static com.example.newClientWebservice.Service.HistoryService.getCurrentUserHistory;
 import static com.example.newClientWebservice.Service.UtilService.getIntInput;
+import static com.example.newClientWebservice.Service.UtilService.getLongInput;
 
 /**
  * Denna klass används för att skapa en meny för användare.
@@ -79,7 +80,7 @@ public class UserMenu {
                 .orElse(null);
 
         if (selectedArticle != null) {
-            CartService.addArticleToCart(Math.toIntExact(cartId), Math.toIntExact(selectedArticle.getId()), quantity, jwt);
+            CartService.addArticleToCart(cartId, selectedArticle.getId(), quantity, jwt);
         } else {
             System.out.println("Invalid article number. Please try again.");
         }
@@ -87,11 +88,10 @@ public class UserMenu {
 
     private static void viewCart(String jwt, Long cartId) {
 
-        try {
-        Cart cart = getOneCartById(Math.toIntExact(cartId), jwt);
+        Cart cart = getOneCartById(cartId, jwt);
 
         if (cart != null) {
-            System.out.printf("\nCart %d belongs to %s and contains:%n", cart.getId(), cart.getUsername());
+            System.out.printf("\nCart %d belongs to %s and contains:\n", cart.getId(), cart.getUsername());
             for (CartItem cartItem : cart.getCartItems()) {
                 Article article = cartItem.getArticle();
                 System.out.printf(" Article id: %d\n Article: %s \n Price: %d \n Description: %s \n Quantity: %d\n%n",
@@ -101,42 +101,31 @@ public class UserMenu {
         } else {
             System.out.println("Cart not found or an error occurred.");
         }
-    } catch (ArithmeticException e) {
-            System.out.println("Error: Cart ID is too large to be represented as an int.");
-        }
     }
 
     private static void deleteFruitFromCart(String jwt, Long cartId) {
 
-        try {
-        int articleId = getIntInput("Enter the article ID: ");
+        Long articleId = getLongInput("Enter the article ID: ");
 
-        if (CartService.controlIfArticleExistsInCart(Math.toIntExact(cartId), articleId, jwt)) {
+        if (CartService.controlIfArticleExistsInCart(cartId, articleId, jwt)) {
 
-            CartService.deleteArticleFromCart(Math.toIntExact(cartId), articleId, jwt);
+            CartService.deleteArticleFromCart(cartId, articleId, jwt);
         } else {
 
             System.out.println("Error: Article does not exist in the cart.");
-        }
-    } catch (ArithmeticException e) {
-            System.out.println("Error: Cart ID is too large to be represented as an int.");
         }
     }
 
     private static void updateFruitQuantity(String jwt, Long cartId) {
 
-        try {
-        int articleId = getIntInput("Enter the article ID: ");
+        Long articleId = getLongInput("Enter the article ID: ");
         int quantity = getIntInput("Enter the new quantity: ");
 
-        if (CartService.controlIfArticleExistsInCart(Math.toIntExact(cartId), articleId, jwt)) {
-            CartService.updateArticleCount(Math.toIntExact(cartId), quantity, articleId, jwt);
+        if (CartService.controlIfArticleExistsInCart(cartId, articleId, jwt)) {
+            CartService.updateArticleCount(cartId, quantity, articleId, jwt);
             System.out.println("Article quantity updated successfully in the cart.");
         } else {
             System.out.println("Error: Article does not exist in the cart.");
-        }
-    } catch (ArithmeticException e) {
-            System.out.println("Error: Cart ID is too large to be represented as an int.");
         }
     }
 

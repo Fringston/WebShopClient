@@ -59,8 +59,7 @@ public class ArticleService {
                 HttpEntity entity = response.getEntity();
                 ObjectMapper mapper = new ObjectMapper();
 
-                return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<Article>>() {
-                });
+                return mapper.readValue(EntityUtils.toString(entity), new TypeReference<ArrayList<Article>>() {});
 
             } catch (JsonMappingException e) {
                 System.out.println("Mapping Error: " + e.getMessage());
@@ -84,10 +83,10 @@ public class ArticleService {
      * @param id är id:t för den artikel som ska hämtas.
      * @return en artikel med det specifika id:t.
      */
-    public static Article getOneArticle(int id) {
+    public static Article getOneArticle(Long id) {
 
         try {
-            HttpGet request = new HttpGet(String.format("http://localhost:8081/webshop/articles/%d", id));
+            HttpGet request = new HttpGet(String.format("http://localhost:8081/webshop/articles/%s", id));
 
             try (CloseableHttpResponse response = httpClient.execute(request)) {
 
@@ -147,41 +146,41 @@ public class ArticleService {
     public static void addArticle(String jwt) {
 
         try {
-       Article newArticle = createArticle();
+            Article newArticle = createArticle();
 
-        HttpPost request = new HttpPost("http://localhost:8081/webshop/articles");
+            HttpPost request = new HttpPost("http://localhost:8081/webshop/articles");
 
-        ObjectMapper mapper = new ObjectMapper();
-        StringEntity payload = new StringEntity(mapper.writeValueAsString(newArticle), ContentType.APPLICATION_JSON);
+            ObjectMapper mapper = new ObjectMapper();
+            StringEntity payload = new StringEntity(mapper.writeValueAsString(newArticle), ContentType.APPLICATION_JSON);
 
-        request.setEntity(payload);
-        request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-        request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+            request.setEntity(payload);
+            request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+            request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
-        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
 
-        if (response.getCode() != 200) {
-            System.out.println("Error occurred. HTTP response code: " + response.getCode());
-            return;
-        }
+                if (response.getCode() != 200) {
+                    System.out.println("Error occurred. HTTP response code: " + response.getCode());
+                    return;
+                }
 
-        HttpEntity entity = response.getEntity();
+                HttpEntity entity = response.getEntity();
 
-        Article responseArticle = mapper.readValue(EntityUtils.toString(entity), new TypeReference<Article>() {});
+                Article responseArticle = mapper.readValue(EntityUtils.toString(entity), new TypeReference<Article>() {});
 
-        if (responseArticle.getName().equals(newArticle.getName()) && responseArticle.getCost() == newArticle.getCost()
-                && responseArticle.getDescription().equals(newArticle.getDescription())) {
-            System.out.printf("The article: %s, has been added%n", responseArticle.getName());
-        } else {
-            System.out.println("Something went wrong");
-        }
-    } catch (JsonMappingException e) {
-        System.out.println("Mapping Error: " + e.getMessage());
-    } catch (IOException e) {
-        System.out.println("IO Error: " + e.getMessage());
-    } catch (ParseException e) {
-        System.out.println("Parse Error: " + e.getMessage());
-    }
+                if (responseArticle.getName().equals(newArticle.getName()) && responseArticle.getCost() == newArticle.getCost()
+                        && responseArticle.getDescription().equals(newArticle.getDescription())) {
+                    System.out.printf("The article: %s, has been added%n", responseArticle.getName());
+                } else {
+                    System.out.println("Something went wrong");
+                }
+            } catch (JsonMappingException e) {
+                System.out.println("Mapping Error: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IO Error: " + e.getMessage());
+            } catch (ParseException e) {
+                System.out.println("Parse Error: " + e.getMessage());
+            }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -196,10 +195,10 @@ public class ArticleService {
      * @param jwt är en String som innehåller en JWT-token.
      * @return den uppdaterade artikeln.
      */
-    public static Void updateArticle(int id, Article existingArticle, Article article, String jwt) {
+    public static Void updateArticle(Long id, Article existingArticle, Article article, String jwt) {
 
         try {
-        HttpPatch request = new HttpPatch(String.format("http://localhost:8081/webshop/articles/%d", id));
+        HttpPatch request = new HttpPatch(String.format("http://localhost:8081/webshop/articles/%s", id));
 
         if (article.getName() == null) {
             article.setName(existingArticle.getName());
@@ -262,10 +261,10 @@ public class ArticleService {
      * @param id är id:t för den artikel som ska tas bort.
      * @param jwt är en String som innehåller en JWT-token.
      */
-    public static void deleteArticle(int id, String jwt) {
+    public static void deleteArticle(Long id, String jwt) {
 
         try {
-        HttpDelete request = new HttpDelete(String.format("http://localhost:8081/webshop/articles/%d", id));
+        HttpDelete request = new HttpDelete(String.format("http://localhost:8081/webshop/articles/%s", id));
 
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 

@@ -20,6 +20,7 @@ public class History {
     private Set<Article> purchasedArticles;
     private User user;
     private int totalCost;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
